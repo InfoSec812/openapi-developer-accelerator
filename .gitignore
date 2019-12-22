@@ -6,3 +6,4 @@ src/main/resources/webroot/**/*
 !src/main/resources/webroot/.gitkeep
 src/main/frontend/node
 src/main/frontend/node_modules
+vertx-start-process.id
