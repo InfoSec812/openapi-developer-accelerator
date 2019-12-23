@@ -6,6 +6,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
+import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import org.openapitools.codegen.CodegenConfig;
 import org.openapitools.codegen.CodegenConfigLoader;
 
@@ -18,11 +19,14 @@ public class MainVerticle extends AbstractVerticle {
     public void start(Promise<Void> startPromise) throws Exception {
         Router router = Router.router(vertx);
 
+        CorsHandler cors = CorsHandler.create("*");
+        router.route().handler(cors);
+
         router.get("/generator").produces(APPLICATION_JSON).handler(this::listAvailableCodeGenerators);
         router.get("/generator/:name").produces(APPLICATION_JSON).handler(this::listGeneratorOptions);
 
 
-        vertx.createHttpServer().requestHandler(router).listen(8080);
+        vertx.createHttpServer().requestHandler(router).listen(8081);
 
         startPromise.complete();
     }

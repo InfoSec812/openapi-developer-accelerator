@@ -1,7 +1,4 @@
 import yaml from 'js-yaml';
-import axios from 'axios';
-
-axios.defaults.baseURL = 'http://localhost:8081';
 
 export function newProject(state, project) {
   state.projects[project.id] = project;
