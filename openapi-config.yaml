@@ -1,0 +1,10 @@
+---
+modelPackage: com.redhat.openapi.generator.models
+apiPackage: com.redhat.openapi.generator.api
+invokerPackage: com.redhat.openapi.generator
+groupId: com.redhat.openapi
+artifactId: openapi-accellerator
+dateLibrary: java8
+booleanGetterPrefix: is
+artifactVersion: 1.0.1
+title: OpenAPI Accellerator

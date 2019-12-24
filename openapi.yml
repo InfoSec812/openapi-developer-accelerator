@@ -1,0 +1,417 @@
+openapi: 3.0.2
+info:
+    title: openapi-generator
+    version: 1.0.0
+paths:
+    /projects:
+        summary: Path used to manage the list of projects.
+        description: >-
+            The REST endpoint/path used to list and create zero or more `Project` entities.  This path
+            contains a `GET` and `POST` operation to perform the list and create tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Project'
+                    description: Successful response - returns an array of `Project` entities.
+            operationId: getprojects
+            summary: List All projects
+            description: Gets a list of all `Project` entities.
+        post:
+            requestBody:
+                description: A new `Project` to be created.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Project'
+                required: true
+            responses:
+                '201':
+                    description: Successful response.
+            operationId: createProject
+            summary: Create a Project
+            description: Creates a new instance of a `Project`.
+    '/projects/{projectId}':
+        summary: Path used to manage a single Project.
+        description: >-
+            The REST endpoint/path used to get, update, and delete single instances of an `Project`.  This
+            path contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and delete
+            tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Project'
+                    description: Successful response - returns a single `Project`.
+            operationId: getProject
+            summary: Get a Project
+            description: Gets the details of a single instance of a `Project`.
+        put:
+            requestBody:
+                description: Updated `Project` information.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Project'
+                required: true
+            responses:
+                '202':
+                    description: Successful response.
+            operationId: updateProject
+            summary: Update a Project
+            description: Updates an existing `Project`.
+        delete:
+            responses:
+                '204':
+                    description: Successful response.
+            operationId: deleteProject
+            summary: Delete a Project
+            description: Deletes an existing `Project`.
+        parameters:
+            -
+                name: projectId
+                description: A unique identifier for a `Project`.
+                schema:
+                    type: string
+                in: path
+                required: true
+    /implementations:
+        summary: Path used to manage the list of implementations.
+        description: >-
+            The REST endpoint/path used to list and create zero or more `Implementation` entities.  This path
+            contains a `GET` and `POST` operation to perform the list and create tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Implementation'
+                    description: Successful response - returns an array of `Implementation` entities.
+            operationId: getimplementations
+            summary: List All implementations
+            description: Gets a list of all `Implementation` entities.
+        post:
+            requestBody:
+                description: A new `Implementation` to be created.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Implementation'
+                required: true
+            responses:
+                '201':
+                    description: Successful response.
+            operationId: createImplementation
+            summary: Create a Implementation
+            description: Creates a new instance of a `Implementation`.
+    '/implementations/{implementationId}':
+        summary: Path used to manage a single Implementation.
+        description: >-
+            The REST endpoint/path used to get, update, and delete single instances of an `Implementation`. 
+            This path contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and
+            delete tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Implementation'
+                    description: Successful response - returns a single `Implementation`.
+            operationId: getImplementation
+            summary: Get a Implementation
+            description: Gets the details of a single instance of a `Implementation`.
+        put:
+            requestBody:
+                description: Updated `Implementation` information.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Implementation'
+                required: true
+            responses:
+                '202':
+                    description: Successful response.
+            operationId: updateImplementation
+            summary: Update a Implementation
+            description: Updates an existing `Implementation`.
+        delete:
+            responses:
+                '204':
+                    description: Successful response.
+            operationId: deleteImplementation
+            summary: Delete a Implementation
+            description: Deletes an existing `Implementation`.
+        parameters:
+            -
+                name: implementationId
+                description: A unique identifier for a `Implementation`.
+                schema:
+                    type: string
+                in: path
+                required: true
+    /gitcredentials:
+        summary: Path used to manage the list of gitcredentials.
+        description: >-
+            The REST endpoint/path used to list and create zero or more `GitCredential` entities.  This path
+            contains a `GET` and `POST` operation to perform the list and create tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/GitCredential'
+                    description: Successful response - returns an array of `GitCredential` entities.
+            operationId: getgitcredentials
+            summary: List All gitcredentials
+            description: Gets a list of all `GitCredential` entities.
+        post:
+            requestBody:
+                description: A new `GitCredential` to be created.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GitCredential'
+                required: true
+            responses:
+                '201':
+                    description: Successful response.
+            operationId: createGitCredential
+            summary: Create a GitCredential
+            description: Creates a new instance of a `GitCredential`.
+    '/gitcredentials/{gitcredentialId}':
+        summary: Path used to manage a single GitCredential.
+        description: >-
+            The REST endpoint/path used to get, update, and delete single instances of an `GitCredential`. 
+            This path contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and
+            delete tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GitCredential'
+                    description: Successful response - returns a single `GitCredential`.
+            operationId: getGitCredential
+            summary: Get a GitCredential
+            description: Gets the details of a single instance of a `GitCredential`.
+        put:
+            requestBody:
+                description: Updated `GitCredential` information.
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GitCredential'
+                required: true
+            responses:
+                '202':
+                    description: Successful response.
+            operationId: updateGitCredential
+            summary: Update a GitCredential
+            description: Updates an existing `GitCredential`.
+        delete:
+            responses:
+                '204':
+                    description: Successful response.
+            operationId: deleteGitCredential
+            summary: Delete a GitCredential
+            description: Deletes an existing `GitCredential`.
+        parameters:
+            -
+                name: gitcredentialId
+                description: A unique identifier for a `GitCredential`.
+                schema:
+                    type: string
+                in: path
+                required: true
+    /generators:
+        summary: Path used to manage the list of generators.
+        description: >-
+            The REST endpoint/path used to list and create zero or more `Generator` entities.  This path
+            contains a `GET` and `POST` operation to perform the list and create tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Generator'
+                    description: Successful response - returns an array of `Generator` entities.
+            operationId: getgenerators
+            summary: List All generators
+            description: Gets a list of all `Generator` entities.
+    '/generators/{name}':
+        summary: Path used to manage a single Generator.
+        description: >-
+            The REST endpoint/path used to get, update, and delete single instances of an `Generator`.  This
+            path contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and delete
+            tasks, respectively.
+        get:
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/GeneratorOptions'
+                    description: Successful response - returns an array of `GeneratorOptions` entities.
+            operationId: getgeneratoroptions
+            summary: List All generatoroptions
+            description: Gets a list of all `GeneratorOptions` entities.
+        parameters:
+            -
+                name: name
+                description: A unique identifier for a `Generator`.
+                schema:
+                    type: string
+                in: path
+                required: true
+components:
+    schemas:
+        Project:
+            title: Project
+            description: ''
+            type: object
+            properties:
+                id:
+                    format: int64
+                    type: integer
+                name:
+                    type: string
+                description:
+                    type: string
+                specification:
+                    type: string
+                created:
+                    format: date-time
+                    type: string
+                owner:
+                    type: string
+            example:
+                id: 2313334
+                name: OpenAPI Project
+                description: My cool API driven project
+                specification: <SOME YAML OR JSON>
+                created: '2019-12-23T15:39:55.000Z'
+                owner: InfoSec812
+        Implementation:
+            title: Implementation
+            description: ''
+            type: object
+            properties:
+                id:
+                    format: int64
+                    type: integer
+                projectId:
+                    format: int64
+                    type: integer
+                name:
+                    type: string
+                implementation:
+                    type: string
+                gitUrl:
+                    type: string
+                customizeTemplates:
+                    type: boolean
+                configuration:
+                    type: object
+                    additionalProperties: true
+            example:
+                id: 2888936
+                projectId: 38192
+                name: Server
+                implementation: jaxrs-resteasy
+                gitUrl: 'git@github.com:username/project.git'
+                customizeTemplates: false
+                configuration:
+                    apiPackage: com.redhat.openapi.generator
+                    groupId: com.redhat.openapi
+                    artifactId: openapi-generator-service
+                    artifactVersion: 1.0.1
+        GitCredential:
+            title: GitCredential
+            description: ''
+            required:
+                - type
+            type: object
+            properties:
+                type:
+                    description: The type of credential this is
+                    enum:
+                        - sshKey
+                        - usernamePassword
+                        - token
+                    type: string
+                key:
+                    description: 'When type is ''sshKey'', this is the private key for SSH authentication'
+                    type: string
+                username:
+                    description: 'When type is ''usernamePassword'', this is the username to use for Git authentication'
+                    type: string
+                password:
+                    description: 'When type is `usernamePassword`, this is the password for git authentication'
+                    type: string
+                token:
+                    description: 'When type is ''token'', this is the token to use for Git authentication'
+                    type: string
+            example:
+                type: sshKey
+                key: <PRIVATE SSH KEY>
+                username: InfoSec812
+                password: SuperSecretPassword
+                token: <SOME RANDOM TOKEN>
+        Generator:
+            title: Generator
+            description: ''
+            type: object
+            properties:
+                name:
+                    type: string
+                description:
+                    type: string
+            example:
+                name: typescript-axios
+                description: Generates a TypeScript client library using axios.
+        GeneratorOptions:
+            title: GeneratorOptions
+            description: ''
+            type: object
+            properties:
+                option:
+                    type: string
+                description:
+                    type: string
+                defaultValue:
+                    type: string
+                help:
+                    type: string
+                optionType:
+                    type: string
+                enumValues:
+                    type: string
+            example:
+                option: withXml
+                description: >-
+                    whether to include support for application/xml content type and include XML annotations in
+                    the model (works with libraries that provide support for JSON and XML)
+                defaultValue: 'false'
+                help: >-
+                    whether to include support for application/xml content type and include XML annotations in
+                    the model (works with libraries that provide support for JSON and XML) (Default: false)
+                optionType: boolean
