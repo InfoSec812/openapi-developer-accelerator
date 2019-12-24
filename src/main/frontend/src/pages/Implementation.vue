@@ -1,10 +1,11 @@
 <template>
   <q-page padding class="col">
-    Implementation {{ $route.params.implementationName }}
+    Implementation {{ generatorName }}
 
     <div class="row">
       <q-select filled v-model="generatorName" class="col-grow"
-                :options="generatorNames" stack-label label="Generator" />
+                :options="generatorNames" stack-label label="Generator"
+                @input="updateGeneratorConfigs" />
       <q-icon name="help" class="col-1" size="40px">
         <q-tooltip>
           {{ descriptionForGenerator }}
@@ -42,7 +43,7 @@ export default {
   components: { DynamicFormInput },
   data() {
     return {
-      generatorName: this.$route.params.implementationName,
+      generatorName: '',
       genOpts: [],
       config: {},
     };
@@ -74,13 +75,19 @@ export default {
       },
     },
   },
+  methods: {
+    updateGeneratorConfigs() {
+      axios.get(`/generator/${this.$data.generatorName}`)
+        .then((res) => {
+          this.$data.genOpts = res.data;
+        })
+        .catch(err => console.log(err));
+    },
+  },
   mounted() {
     console.log(`Requesting: /generator/${this.$route.params.implementationName}`);
-    axios.get(`/generator/${this.$route.params.implementationName}`)
-      .then((res) => {
-        this.$data.genOpts = res.data;
-      })
-      .catch(err => console.log(err));
+    this.$data.generatorName = this.$route.params.implementationName;
+    this.updateGeneratorConfigs();
   },
 };
 </script>
