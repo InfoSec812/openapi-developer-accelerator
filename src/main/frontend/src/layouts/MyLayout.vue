@@ -15,7 +15,7 @@
           Developer Accelerator
         </q-toolbar-title>
 
-        <div>Version 0.0.1</div>
+        <q-btn flat dense round icon="add" @click="$router.push('/project/new')"/>
         <q-btn flat dense round @click="$router.push('/config')" icon="settings" />
       </q-toolbar>
     </q-header>
@@ -42,7 +42,7 @@
 <script>
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:8081';
+axios.defaults.baseURL = 'http://localhost:8086/api/v1';
 
 export default {
   name: 'MyLayout',
@@ -65,10 +65,10 @@ export default {
     },
   },
   mounted() {
-    // axios.get('/project')
-    //   .then(res => this.$store.commit('projects/loadProjectList', res.data))
-    //   .catch(err => console.log(err));
-    axios.get('/generator')
+    axios.get('/projects')
+      .then(res => this.$store.commit('projects/loadProjectList', res.data))
+      .catch(err => console.log(err));
+    axios.get('/generators')
       .then(res => this.$store.commit('projects/loadGeneratorsList', res.data))
       .catch(err => console.log(err));
   },

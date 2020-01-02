@@ -346,11 +346,14 @@ components:
                     artifactVersion: 1.0.1
         GitCredential:
             title: GitCredential
-            description: ''
+            description: 'A token/username+password/sshkey/etc... to authenticate to a Git repository'
             required:
                 - type
+                - name
             type: object
             properties:
+                name:
+                    type: string
                 type:
                     description: The type of credential this is
                     enum:
