@@ -2,6 +2,16 @@
   <q-page padding class="col">
     Implementation {{ generatorName }}
 
+    <q-option-group class="row"
+                    :options="implTypeOptions"
+                    label="Implementation Types"
+                    type="checkbox"
+                    v-model="implTypeFilters" />
+    <q-option-group class="row"
+                    :options="implStatusOptions"
+                    label="Implementation Statuses"
+                    type="checkbox"
+                    v-model="implStatusFilters" />
     <div class="row">
       <q-select filled v-model="generatorName" class="col-grow"
                 :options="generatorNames" stack-label label="Generator"
@@ -10,7 +20,7 @@
           <q-item v-on="scope.itemEvents" :style="scope.opt.color"
                   v-bind="scope.itemProps">
             <q-item-section no-wrap style="max-width: 10em;">
-              <q-item-label caption>{{ scope.opt.tag }}</q-item-label>
+              <q-item-label caption>{{ scope.opt.category }}</q-item-label>
             </q-item-section>
             <q-item-section class="col-grow">
               <q-item-label>{{ scope.opt.label }}</q-item-label>
@@ -28,16 +38,19 @@
       </q-icon>
     </div>
     <q-list>
-      <q-item v-for="opt in genOpts" :key="opt.option">
-<!--        <q-item-section avatar>-->
-<!--          <q-icon name="help" size="20px" >-->
-<!--            <q-tooltip>{{ opt.description }}</q-tooltip>-->
-<!--          </q-icon>-->
-<!--        </q-item-section>-->
-        <q-item-section>
-          <dynamic-form-input v-model="config[opt.opt]" :option="opt" />
-        </q-item-section>
+      <q-item v-for="opt in reccommendedOptions" :key="opt.opt">
+        <dynamic-form-input v-model="config[opt.opt]" :option="opt" />
       </q-item>
+      <q-expansion-item>
+        <template v-slot:header>
+          <div class="advancedOptions col-grow">
+            Advanced Options
+          </div>
+        </template>
+        <q-item v-for="opt in advOptions" :key="opt.opt">
+          <dynamic-form-input v-model="config[opt.opt]" :option="opt" />
+        </q-item>
+      </q-expansion-item>
     </q-list>
   </q-page>
 </template>
@@ -45,6 +58,10 @@
 <style lang="scss">
 .paddedRow {
   padding-bottom: 20px;
+}
+.advancedOptions {
+  size: 7em;
+  font-weight: bold;
 }
 </style>
 
@@ -62,19 +79,34 @@ export default {
       generatorName: '',
       genOpts: [],
       config: {},
+      implTypeFilters: ['CLIENT', 'SERVER'],
+      implTypeOptions: [
+        { label: 'Clients', value: 'CLIENT' },
+        { label: 'Servers', value: 'SERVER' },
+        { label: 'Documentation', value: 'DOCUMENTATION' },
+        { label: 'Configurations', value: 'CONFIG' },
+        { label: 'Schema', value: 'SCHEMA' },
+      ],
+      implStatusFilters: ['STABLE', 'BETA'],
+      implStatusOptions: [
+        { label: 'Stable', value: 'STABLE', color: 'green' },
+        { label: 'Beta', value: 'BETA', color: 'yellow' },
+        { label: 'Experimental', value: 'EXPERIMENTAL', color: 'blue' },
+        { label: 'Deprecated', value: 'DEPRECATED', color: 'red' },
+      ],
     };
   },
-  watch: {
-    config: {
-      deep: true,
-      handler() {
-        if (this.$data.config.dateLibrary === 'java8' || this.$data.config.dateLibrary === 'java8-localdatetime') {
-          this.$data.config.java8 = true;
-        }
+  computed: {
+    reccommendedOptions: {
+      get() {
+        return this.$data.genOpts.filter(opt => !opt.advanced);
       },
     },
-  },
-  computed: {
+    advOptions: {
+      get() {
+        return this.$data.genOpts.filter(opt => opt.advanced);
+      },
+    },
     generatorList: {
       get() {
         return this.$store.state.projects.generators;
@@ -84,7 +116,7 @@ export default {
       get() {
         return this.generatorList.map((g) => {
           const retVal = {
-            label: g.name, value: g.name, description: g.help, tag: g.tag,
+            label: g.name, value: g.name, description: g.help, category: g.tag,
           };
           switch (g.generatorMetadata.stability) {
             case 'BETA':
@@ -104,6 +136,12 @@ export default {
               retVal.status = 'STABLE';
           }
           return retVal;
+        }).filter((g) => {
+          console.log(`Checking if '${g.category}' is in list '${this.$data.implTypeFilters}'`);
+          return this.$data.implTypeFilters.includes(g.category.toUpperCase());
+        }).filter((g) => {
+          console.log(`Checking if '${g.status}' is in list '${this.$data.implStatusFilters}'`);
+          return this.$data.implStatusFilters.includes(g.status.toUpperCase());
         });
       },
     },
@@ -118,10 +156,22 @@ export default {
     updateGeneratorConfigs() {
       axios.get(`/generators/${this.$data.generatorName}`)
         .then((res) => {
-          this.$data.genOpts = res.data;
+          this.$data.config = {};
+          this.$data.genOpts = [];
+          // Since we are dynamically defining the options based on the generator, we
+          // have to let Vue know about each element so that it can set them up to be
+          // reactive.
           res.data.forEach((opt) => {
             if (typeof this.$data.config[opt.opt] === 'undefined') {
-              this.$data.config[opt.opt] = (typeof opt.default === 'undefined' || opt.default === null) ? null : opt.default;
+              if (opt.type === 'boolean') {
+                const boolVal = (typeof opt.default === 'undefined' || opt.default === null) ? null : opt.default === 'true';
+                this.$set(this.$data.config, opt.opt, boolVal);
+                this.$data.genOpts.push(opt);
+              } else {
+                const newVal = (typeof opt.default === 'undefined' || opt.default === null) ? null : opt.default;
+                this.$set(this.$data.config, opt.opt, newVal);
+                this.$data.genOpts.push(opt);
+              }
             }
           });
         })

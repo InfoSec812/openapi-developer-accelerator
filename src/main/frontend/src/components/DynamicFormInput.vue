@@ -1,14 +1,14 @@
 <template>
   <div class="col-grow">
-    <q-input :value="defaultedValue" dense stack-label @input="updateValue"
+    <q-input :value="value" dense stack-label
              v-if="optionInputType(option, 'string')"
-             :label="option.description" hide-hint
+             :label="option.description" hide-hint @input="update"
              :hint="option.defaultValue" class="row" />
-    <q-checkbox :value="defaultedValue" :toggle-indeterminate="false"
+    <q-checkbox :value="value" :toggle-indeterminate="false" @input="update"
                 v-if="optionInputType(option, 'boolean')" class="row"
-                :label="option.description" dense @input="updateValue" />
-    <q-select :value="defaultedValue" stack-label dense :options-dense="false"
-              :label="option.description" @input="updateValue" emit-value
+                :label="option.description" dense ref="checkbox" />
+    <q-select :value="value" stack-label dense :options-dense="false"
+              :label="option.description" emit-value @input="update"
               v-if="optionInputType(option, 'enum')" map-options
               class="row" :options="enumOptionsObject(option)" />
   </div>
@@ -17,17 +17,6 @@
 <script>
 export default {
   props: ['option', 'value'],
-  computed: {
-    defaultedValue() { // If the `value` is null or undefined, replace it with the defaultValue
-      if (typeof this.$props.value === 'undefined') {
-        console.log(`Option ${this.$props.option.opt} is undefined`);
-      }
-      if (!this.optionInputType(this.$props.option, 'string') && this.$props.value === 'undefined') {
-        return this.$props.option.default;
-      }
-      return this.$props.value;
-    },
-  },
   methods: {
     optionInputType(option, desiredType) {
       switch (desiredType) {
@@ -41,9 +30,8 @@ export default {
           return option.type === desiredType;
       }
     },
-    updateValue(newValue) {
-      const updatedValue = newValue === '' ? null : newValue;
-      this.$emit('input', updatedValue);
+    update(newValue) {
+      this.$emit('input', newValue);
     },
     enumOptionsObject(option) {
       return Object.entries(option.enum)
